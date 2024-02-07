@@ -10,9 +10,7 @@ const path = require('path');
 
 // require('dotenv').config();
 
-// const db = mongoose.connection;
-// db.on('error',(error)=>console.log(error));
-// db.once('open',()=>console.log('Database Already'))
+
 
 // app.use(express.static(path.join(__dirname, 'public')));
 // app.use(express.urlencoded({extended:false}));
@@ -26,7 +24,6 @@ const path = require('path');
 //  );
 
 require('dotenv').config();
-
 
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -50,6 +47,12 @@ app.use(
 });
 
 mongoose.Promise = global.Promise;
+
+//database1
+// const db = mongoose.connection;
+// db.on('error',(error)=>console.log(error));
+// db.once('open',()=>console.log('Database Already'))
+
 // //connectdatabase
 // mongoose.connect('mongodb+srv://nicekrubma10:kulab12345@cluster0.uqjxafb.mongodb.net/?retryWrites=true&w=majority',
 // {useNewUrlParser: true})
@@ -59,7 +62,7 @@ mongoose.Promise = global.Promise;
 //     console.log("App listening on port 3000")
 // })
 
-//database
+//database2
 const db = mongoose.connection;
 db.on('error', (error) => console.log(error));
 db.once('open', () => console.log('Database Already'));
@@ -70,9 +73,6 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://nicekrubma10:kulab123
 app.listen(process.env.PORT || 3000, () => {
   console.log(`App listening on port ${process.env.PORT || 3000}`);
 });
-
-
-
 
 app.use(express.static('public'))
 app.use(flash())
