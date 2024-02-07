@@ -104,7 +104,7 @@ const redirectAuth = require('./middleware/redirectAuth')
 const authMiddleware = require('./middleware/authMiddleware')
 
 //get directory
-// app.get('/', indexController)
+// app.get('/', indexController) test
 app.get('/index',indexController)
 app.get('/', loginController)
 app.get('/home',authMiddleware,homeController)
