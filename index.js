@@ -68,8 +68,8 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://nicekrubma10:kulab123
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-app.listen(process.env.PORT || 8080, () => {
-  console.log(`App listening on port ${process.env.PORT || 8080}`);
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`App listening on port ${process.env.PORT || 3000}`);
 });
 
 app.use(express.static('public'))
