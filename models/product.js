@@ -6,11 +6,6 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     price: Number,
     image: String,
-    created:{
-        type: Date,
-        required: true,
-        default: () => moment().tz('Asia/Bangkok').toDate(),
-    },
 });
 
 module.exports = mongoose.model('Product', ProductSchema);

@@ -5,11 +5,8 @@ const mongoose = require('mongoose');
 // const expressSession = require('express-session');
 const flash = require('connect-flash');
 const path = require('path');
-
 const session = require('express-session')
 const MemoryStore = require('memorystore')(session)
-
-const Product = require('./models/Product');
 
 
 // require('dotenv').config();
