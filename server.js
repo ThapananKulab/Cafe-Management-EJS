@@ -15,6 +15,6 @@ let port = process.env.PORT || 4000;
  })
 
  app.listen(port,()=>{
-console.log(`App listening on port ${process.env.PORT || 4000}`)
+console.log(`Server is runnuing on port ${port}`)
  })
 
