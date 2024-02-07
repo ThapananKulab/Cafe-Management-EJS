@@ -8,21 +8,38 @@ const path = require('path');
 
 //
 
+// require('dotenv').config();
+
+// const db = mongoose.connection;
+// db.on('error',(error)=>console.log(error));
+// db.once('open',()=>console.log('Database Already'))
+
+// app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.urlencoded({extended:false}));
+// app.use(express.json());
+
+// app.use(expressSession({
+//     secret: "node secret", 
+//     saveUninitialized: true,
+//     resave: false,
+//  })
+//  );
+
 require('dotenv').config();
-const db = mongoose.connection;
-db.on('error',(error)=>console.log(error));
-db.once('open',()=>console.log('Database Already'))
+
+
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(expressSession({
-    secret: "node secret", 
+app.use(
+  expressSession({
+    secret: process.env.SESSION_SECRET || 'default_secret',
     saveUninitialized: true,
     resave: false,
- })
- );
+  })
+);
 
  app.set('view engine','ejs')
 
@@ -31,6 +48,40 @@ app.use(expressSession({
     delete req.session.massage;
     next();
 });
+
+mongoose.Promise = global.Promise;
+// //connectdatabase
+// mongoose.connect('mongodb+srv://nicekrubma10:kulab12345@cluster0.uqjxafb.mongodb.net/?retryWrites=true&w=majority',
+// {useNewUrlParser: true})
+
+
+// app.listen(3000,() => {
+//     console.log("App listening on port 3000")
+// })
+
+//database
+const db = mongoose.connection;
+db.on('error', (error) => console.log(error));
+db.once('open', () => console.log('Database Already'));
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://nicekrubma10:kulab12345@cluster0.uqjxafb.mongodb.net/?retryWrites=true&w=majority', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`App listening on port ${process.env.PORT || 3000}`);
+});
+
+
+
+
+app.use(express.static('public'))
+app.use(flash())
+global.loggedIn = null
+app.use("*",(req,res,next)=>{
+    loggedIn = req.session.userId
+    next()
+})
+
 
 //require
 const indexController = require('./controllers/indexController')
@@ -49,22 +100,6 @@ const editprofileAController  = require('./controllers/editprofileAController');
 const editproductUController  = require('./controllers/editproductUController');
 const editrawUController  = require('./controllers/editrawUController');
 const bomController = require('./controllers/bomController');
-
-mongoose.Promise = global.Promise;
-//connectdatabase
-mongoose.connect('mongodb+srv://nicekrubma10:kulab12345@cluster0.uqjxafb.mongodb.net/?retryWrites=true&w=majority',
-{useNewUrlParser: true})
-
-
-app.use(express.static('public'))
-app.use(flash())
-
-
-global.loggedIn = null
-app.use("*",(req,res,next)=>{
-    loggedIn = req.session.userId
-    next()
-})
 
 //middleware
 const redirectAuth = require('./middleware/redirectAuth')
@@ -117,7 +152,4 @@ app.use('/users',users);
 const raws = require('./routes/raws')
 app.use('/raws',raws);
 
-app.listen(3000,() => {
-    console.log("App listening on port 3000")
-})
 
