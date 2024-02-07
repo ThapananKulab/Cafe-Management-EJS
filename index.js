@@ -9,6 +9,9 @@ const path = require('path');
 const session = require('express-session')
 const MemoryStore = require('memorystore')(session)
 
+const Product = require('./models/Product');
+
+
 // require('dotenv').config();
 // app.use(express.static(path.join(__dirname, 'public')));
 // app.use(express.urlencoded({extended:false}));
@@ -40,7 +43,8 @@ app.use(session({
     checkPeriod: 86400000 // prune expired entries every 24h
   }),
   resave: false,
-  secret: 'keyboard cat'
+  secret: 'keyboard cat',
+  saveUninitialized: false, // Add this line
 }))
 
  app.set('view engine','ejs')

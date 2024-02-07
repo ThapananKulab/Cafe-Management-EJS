@@ -11,10 +11,6 @@ const ProductSchema = new mongoose.Schema({
         required: true,
         default: () => moment().tz('Asia/Bangkok').toDate(),
     },
-    // typepro: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Typepro'
-    //   }
 });
 
 module.exports = mongoose.model('Product', ProductSchema);
