@@ -9,9 +9,6 @@ const path = require('path');
 //
 
 // require('dotenv').config();
-
-
-
 // app.use(express.static(path.join(__dirname, 'public')));
 // app.use(express.urlencoded({extended:false}));
 // app.use(express.json());
@@ -40,11 +37,12 @@ app.use(
 
  app.set('view engine','ejs')
 
- app.use((req,res,next)=>{
-    res.locals.message = req.session.message;
-    delete req.session.massage;
-    next();
+ app.use((req, res, next) => {
+  res.locals.message = req.session.message;
+  delete req.session.message;  // <-- Corrected: 'message' instead of 'massage'
+  next();
 });
+
 
 mongoose.Promise = global.Promise;
 
@@ -70,8 +68,8 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://nicekrubma10:kulab123
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`App listening on port ${process.env.PORT || 3000}`);
+app.listen(process.env.PORT || 8080, () => {
+  console.log(`App listening on port ${process.env.PORT || 8080}`);
 });
 
 app.use(express.static('public'))
