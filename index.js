@@ -2,11 +2,12 @@ const express = require('express');
 const app = express()
 const ejs = require('ejs');
 const mongoose = require('mongoose');
-const expressSession = require('express-session');
+// const expressSession = require('express-session');
 const flash = require('connect-flash');
 const path = require('path');
 
-//
+const session = require('express-session')
+const MemoryStore = require('memorystore')(session)
 
 // require('dotenv').config();
 // app.use(express.static(path.join(__dirname, 'public')));
@@ -21,19 +22,26 @@ const path = require('path');
 //  );
 
 require('dotenv').config();
-
-
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(
-  expressSession({
-    secret: process.env.SESSION_SECRET || 'default_secret',
-    saveUninitialized: true,
-    resave: false,
-  })
-);
+// app.use(
+//   expressSession({
+//     secret: process.env.SESSION_SECRET || 'default_secret',
+//     saveUninitialized: true,
+//     resave: false,
+//   })
+// );
+
+app.use(session({
+  cookie: { maxAge: 86400000 },
+  store: new MemoryStore({
+    checkPeriod: 86400000 // prune expired entries every 24h
+  }),
+  resave: false,
+  secret: 'keyboard cat'
+}))
 
  app.set('view engine','ejs')
 
