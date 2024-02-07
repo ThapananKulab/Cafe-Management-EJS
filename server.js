@@ -1,8 +1,6 @@
 const express = require('express');
 const app = express()
-const ejs = require('ejs');
-
-let port = process.env.PORT || 4000;
+const PORT = 4000
 
  app.set('view engine','ejs')
 
@@ -14,7 +12,8 @@ let port = process.env.PORT || 4000;
   res.render('about')
  })
 
- app.listen(port,()=>{
-console.log(`Server is runnuing on port ${port}`)
- })
+app.listen(PORT,()=>{
+  console.log(`App listening on port ${PORT}`)
+})
 
+ module.exports = app
