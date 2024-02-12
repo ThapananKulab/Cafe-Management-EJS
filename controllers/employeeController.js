@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const Product = require('../models/Product');
+const Product = require('../models/Product.js');
 const Raw = require('../models/Raw');
 const Typepro = require('../models/typepro.js');
 

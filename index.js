@@ -8,6 +8,9 @@ const path = require('path');
 const session = require('express-session')
 const MemoryStore = require('memorystore')(session)
 
+const Product = require('./models/Product');
+
+
 
 
 // require('dotenv').config();
