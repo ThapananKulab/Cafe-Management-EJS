@@ -23,6 +23,26 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 
     <title>ขายเครื่องดื่ม</title>
+    <style>
+      body {
+        font-family: 'Prompt', sans-serif;
+        background-color: #f8f9fa;
+      }
+      .card {
+        transition: transform 0.2s;
+      }
+      .card:hover {
+        transform: scale(1.05);
+      }
+      .cart-item {
+        border-bottom: 1px solid #e9ecef;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+      }
+      .cart-item:last-child {
+        border-bottom: none;
+      }
+    </style>
 </head>
 <body>
   
@@ -72,17 +92,15 @@
                     <div class="product-row row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-start">
                       <% products.forEach(product => { %>
                         <div class="col mb-5">
-                          <div class="card h-100" data-bs-toggle="modal" data-bs-target="#productModal">
+                          <div class="card h-100 shadow-sm">
                             <img class="card-img-top" src="images/products/<%= product.image %>" style="width: 100%; height: 200px; object-fit: cover;">
-                            <div class="card-body p-4">
-                              <div class="text-center">
-                                <h5 class="fw-bolder"><%= product.productname %></h5>
-                                <%= product.type %> 
-                                <br>
-                                <%= product.price %> ฿
-                              </div>
+                            <div class="card-body p-4 text-center">
+                              <h5 class="fw-bolder"><%= product.productname %></h5>
+                              <div><%= product.type %></div>
+                              <div class="text-primary fw-bold"><%= product.price %> ฿</div>
                             </div>
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent text-center">
+                              <button class="btn btn-primary w-100" onclick="addToCart('<%= product.productname %>', <%= product.price %>)">เพิ่มลงในตะกร้า</button>
                             </div>
                           </div>
                         </div>
@@ -93,112 +111,76 @@
             </div>        
 
             <div class="col-md-4">
-              <div class="card aspect-ratio-1x1 rounded-5" style="height: 600px;">
+              <div class="card aspect-ratio-1x1 rounded-5 shadow-sm" style="height: 600px;">
                   <div class="card-body p-4">
-                  <div class="small mb-1 fw-bold">ราคา</div>
+                    <h2>ตะกร้าสินค้า</h2>
+                    <div id="cartItems"></div>
               </div>
               <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                  <div class="card-body p-4">
-                      <div class="row">
-                          <div class="col">
-                              <div class="small mb-1 fw-bold">Total</div>
-                          </div>
-                          <div class="col text-end">
-                              <div class="small mb-1">500฿</div>
-                          </div>
-                      </div>
+                  <div class="row">
+                    <div class="col-6"><strong>ราคารวม</strong></div>
+                    <div class="col-6 text-end" id="totalPrice">0฿</div>
                   </div>
-                  <div class="card-footer p-4 pt-0 border-top-0 bg-transparent text-center">
-                      <a href="/paymentoptions" class="btn btn-gradient-primary btn-lg">ยืนยันคำสั่งซื้อ</a>
-                  </div>
+                  <button class="btn btn-success w-100 mt-3" onclick="checkout()">ชำระเงิน</button>
+              </div>
               </div>
           </div>
-
-        </div>
-      </div>
-
-      
-<!-- Add this modal HTML somewhere in your document -->
-<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="productModalLabel">รายละเอียด</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <!-- Input Form -->
-              <form id="inputForm">
-                  <div class="mb-3">
-                      <label for="productName" class="form-label">Product Name</label>
-                      <input type="text" class="form-control" id="productName" name="productName" required>
-                  </div>
-                  <div class="mb-3">
-                      <label for="productPrice" class="form-label">Product Price</label>
-                      <input type="number" class="form-control" id="productPrice" name="productPrice" required>
-                  </div>
-                  
-
-                  <button type="submit" class="btn btn-gradient-primary">Submit</button>
-              </form>
-
-              <!-- Product details will be displayed here -->
-          </div>
-      </div>
-  </div>
-</div>
-
-
-<!--  
-<script>
-  function fetchAndDisplayProducts(productType) {
-      axios.get(`/products?type=${productType}`)
-          .then(response => {
-              const products = response.data;
-              const productListElement = document.getElementById('product-list');
-              productListElement.innerHTML = ''; // Clear existing products
-
-              products.forEach(product => {
-                  const productCard = document.createElement('div');
-                  productCard.className = 'col mb-5';
-                  productCard.innerHTML = `
-                      <div class="card h-100" data-bs-toggle="modal" data-bs-target="#productModal" onclick="openProductModal('${product.productname}', ${product.price}, 'images/products/${product.image}')">
-                          <img class="card-img-top" src="images/products/${product.image}" style="width: 100%; height: 200px; object-fit: cover;">
-                          <div class="card-body p-4">
-                              <div class="text-center">
-                                  <h5 class="fw-bolder">${product.productname}</h5>
-                                  ${product.type} 
-                                  <br>
-                                  ${product.price} ฿
-                              </div>
-                          </div>
-                          <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                          </div>
-                      </div>`;
-
-                  productListElement.appendChild(productCard);
-              });
-          })
-          .catch(error => {
-              console.error('Error fetching product data:', error);
-          });
-  }
-
-  function handleSearch() {
-      const searchTerm = document.getElementById('search-focus').value.toLowerCase();
-
-      // Call the fetchAndDisplayProducts function with the search term
-      fetchAndDisplayProducts(searchTerm);
-  }
-
-  // Initial call to display all products
-  fetchAndDisplayProducts('all');
-</script> -->
-  
-    
+        </div> 
 </body>
 
+<script>
+  const cart = [];
+
+  function addToCart(name, price) {
+    const product = { name, price, quantity: 1 };
+    const existingProduct = cart.find(item => item.name === name);
+
+    if (existingProduct) {
+      existingProduct.quantity++;
+    } else {
+      cart.push(product);
+    }
+
+    renderCart();
+  }
+
+  function renderCart() {
+    const cartItems = document.getElementById('cartItems');
+    const totalPrice = document.getElementById('totalPrice');
+
+    cartItems.innerHTML = '';
+    let total = 0;
+
+    cart.forEach(item => {
+      const itemTotal = item.price * item.quantity;
+      total += itemTotal;
+
+      cartItems.innerHTML += `
+        <div class="cart-item mb-3">
+          <div class="row">
+            <div class="col-6">
+              ${item.name} x${item.quantity}
+            </div>
+            <div class="col-6 text-end">
+              ${itemTotal}฿
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    totalPrice.innerText = `${total}฿`;
+  }
+
+  function checkout() {
+    alert('ชำระเงินสำเร็จ');
+    cart.length = 0;
+    renderCart();
+  }
+</script>
 </html>
+
+
 
 <style>
   .btn.btn-gradient-primary.btn-lg {
